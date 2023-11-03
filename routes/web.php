@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Services\Cronology\Api as CronologyApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (CronologyApi $api) {
+    $result = $api->ping();
+    dd($api->getAppData());
+    return view('index', [
+        "result" => $result
+    ]);
 });
