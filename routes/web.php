@@ -15,9 +15,5 @@ use App\Services\Cronology\Api as CronologyApi;
 */
 
 Route::get('/', function (CronologyApi $api) {
-    $data = [
-        "ping" => $api->ping(),
-        "appData" => $api->getAppData()
-    ];
-    return view('index', $data);
+    return view('index');
 });

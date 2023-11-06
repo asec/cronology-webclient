@@ -1,22 +1,5 @@
-<?php
-/**
- * @type PingResponse|ApiError $ping
- * @type AppDataResponse|ApiError $appData
- */
-
-use App\Services\Cronology\Response\ApiError;
-use App\Services\Cronology\Response\AppDataResponse;
-use App\Services\Cronology\Response\PingResponse;
-use Carbon\Carbon;
-
-if (!function_exists("formatDate")) {
-    function formatDate(DateTime $date): string
-    {
-        return Carbon::parse($date)->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s");
-    }
-}
-?><!doctype html>
-<html lang="hu-HU" class="h-full bg-gray-100">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,80 +69,11 @@ if (!function_exists("formatDate")) {
 
             <h2 class="font-semibold text-xl mt-6">Ping:</h2>
             <hr class="my-2"/>
-            @if ($ping instanceof ApiError)
-                <div class="text-sm">
-                    <span
-                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-bold text-red-700 ring-1 ring-inset ring-red-600/10">Error</span>
-                    {{ $ping->error }}
-                </div>
-            @else
-                <div class="text-sm">
-                    <span
-                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-700 ring-1 ring-inset ring-green-600/20">Success</span>
-                    {{ $ping->version }}
-                </div>
-            @endif
+            <livewire:ping lazy />
 
             <h2 class="font-semibold text-xl mt-6">Get App Data:</h2>
             <hr class="my-2"/>
-            @if ($appData instanceof ApiError)
-                <div class="text-sm">
-                    <span
-                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-bold text-red-700 ring-1 ring-inset ring-red-600/10">Error</span>
-                    {{ $appData->error }}
-                </div>
-            @else
-                <div class="flex">
-                    <span
-                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-bold text-green-700 ring-1 ring-inset ring-green-600/20">Success</span>
-                    <div class="grow rounded-lg ml-4 border border-slate-300 overflow-hidden">
-                        <table class="border-collapse w-full text-sm">
-                            <thead>
-                            <tr>
-                                <th class="border border-slate-300 border-t-0 border-l-0 p-2 bg-slate-100 font-semibold">
-                                    App Name
-                                </th>
-                                <th class="border border-slate-300 border-t-0 p-2 bg-slate-100 font-semibold">
-                                    App UUID
-                                </th>
-                                <th class="border border-slate-300 border-t-0 p-2 bg-slate-100 font-semibold">
-                                    IP
-                                </th>
-                                <th class="border border-slate-300 border-t-0 p-2 bg-slate-100 font-semibold">
-                                    Created
-                                </th>
-                                <th class="border border-slate-300 border-t-0 border-r-0 p-2 bg-slate-100 font-semibold">
-                                    Modified
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="border border-slate-300 py-3 px-4 border-b-0 border-l-0">
-                                    {{ $appData->result->name }}
-                                </td>
-                                <td class="border border-slate-300 py-3 px-4 border-b-0">
-                                    {{ $appData->result->uuid }}
-                                </td>
-                                <td class="border border-slate-300 py-3 px-4 border-b-0">
-                                    @foreach ($appData->result->ip as $ip)
-                                        <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
-                                            {{ $ip }}
-                                        </span>
-                                    @endforeach
-                                </td>
-                                <td class="border border-slate-300 py-3 px-4 border-b-0">
-                                    {{ formatDate($appData->result->created) }}
-                                </td>
-                                <td class="border border-slate-300 py-3 px-4 border-b-0 border-r-0">
-                                    {{ formatDate($appData->result->updated) }}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endif
+            <livewire:app-data lazy />
         </div>
     </main>
 </div>
