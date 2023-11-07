@@ -5,9 +5,14 @@ namespace App\Livewire;
 use App\Services\Cronology\Api;
 use App\Services\Cronology\Response\ApiError;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
+/**
+ * @property Api $api
+ */
 class AppData extends Component
 {
     public string $error;
@@ -17,14 +22,21 @@ class AppData extends Component
     public string $created;
     public string $updated;
 
+    #[Computed]
+    protected function api(): Api
+    {
+        return App::get(Api::class);
+    }
+
     protected function formatDate(\DateTime $dateTime): string
     {
         return Carbon::parse($dateTime)->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s");
     }
 
-    public function mount(Api $api): void
+    public function refresh(): void
     {
-        $result = $api->getAppData();
+        $this->reset();
+        $result = $this->api->getAppData();
         if ($result instanceof ApiError)
         {
             $this->error = $result->error;
@@ -43,5 +55,11 @@ class AppData extends Component
         return view("livewire.placeholders.default", [
             "text" => "GET '/app/:uuid'"
         ]);
+    }
+
+    public function render(): View
+    {
+        $this->refresh();
+        return view("livewire.app-data");
     }
 }

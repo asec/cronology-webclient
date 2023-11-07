@@ -7,7 +7,7 @@
  * @type string $created
  * @type string $updated
  */
-?><div>
+?><div wire:poll>
     @if ($error)
         <div class="text-sm">
                     <span
