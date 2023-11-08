@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\Cronology\Api as CronologyApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +13,17 @@ use App\Services\Cronology\Api as CronologyApi;
 |
 */
 
-Route::get('/', function (CronologyApi $api) {
+Route::get('/', function () {
     return view('index');
-});
+})->name("home");
+
+Route::get("/register", function () {
+    return view("register");
+})->name("user.register");
+
+if (env("APP_ENV") === "local")
+{
+    Route::get("/register-formstates", function () {
+        return view("register-test-formstates");
+    })->name("user.register-formstates");
+}

@@ -19,18 +19,13 @@ class AppData extends Component
     public string $name;
     public string $uuid;
     public array $ip;
-    public string $created;
-    public string $updated;
+    public \DateTime $created;
+    public \DateTime $updated;
 
     #[Computed]
     protected function api(): Api
     {
         return App::get(Api::class);
-    }
-
-    protected function formatDate(\DateTime $dateTime): string
-    {
-        return Carbon::parse($dateTime)->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s");
     }
 
     public function refresh(): void
@@ -43,11 +38,7 @@ class AppData extends Component
             return;
         }
 
-        $this->name = $result->result->name;
-        $this->uuid = $result->result->uuid;
-        $this->ip = $result->result->ip;
-        $this->created = $this->formatDate($result->result->created);
-        $this->updated = $this->formatDate($result->result->updated);
+        $this->fill($result->result);
     }
 
     public function placeholder(): View

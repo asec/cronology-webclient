@@ -1,3 +1,124 @@
+@import "@fortawesome/fontawesome-free/css/regular.min.css";
+@import "@fortawesome/fontawesome-free/css/solid.min.css";
+@import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cr-form-label
+{
+    @apply block text-sm font-semibold leading-6 text-gray-900
+}
+
+.cr-form-input
+{
+    @apply mt-2 relative
+}
+
+.cr-form-input input
+{
+    @apply block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6
+}
+
+.cr-form-input input:focus, .cr-form-input.cr-state-focused input
+{
+    @apply ring-2 ring-inset ring-blue-600
+}
+
+.cr-form-input input:disabled, .cr-form-input.cr-state-disabled input
+{
+    @apply bg-gray-100
+}
+
+.cr-form-input.cr-state-invalid:not(.cr-dirty) input:not(:disabled)
+{
+    @apply text-red-600 ring-red-500 focus:ring-2
+}
+
+.cr-form-input.cr-state-success input:not(:disabled)
+{
+    @apply ring-green-500 focus:ring-2
+}
+
+.cr-form-input input + .cr-icon
+{
+    @apply absolute top-0 bottom-0 right-0 flex items-center pr-3 text-xl text-gray-300 pointer-events-none
+}
+
+.cr-form-input input:focus + .cr-icon, .cr-form-input.cr-state-focused input + .cr-icon
+{
+    @apply text-blue-600
+}
+
+.cr-form-input.cr-state-invalid:not(.cr-dirty) input + .cr-icon
+{
+    @apply text-red-500
+}
+
+.cr-form-input.cr-state-success input + .cr-icon
+{
+    @apply text-green-600
+}
+
+.cr-loader-ring
+{
+    @apply w-4 h-4 text-gray-200 animate-spin fill-blue-600
+}
+
+.cr-form-input input + .cr-icon .cr-loader-ring
+{
+    @apply text-white
+}
+
+.cr-form-input.cr-state-loading input:focus + .cr-icon .cr-loader-ring,
+.cr-form-input.cr-state-loading.cr-state-focused input + .cr-icon .cr-loader-ring
+{
+    @apply fill-blue-800
+}
+
+.cr-form-input input:disabled + .cr-icon .cr-loader-ring,
+.cr-form-input.cr-state-disabled input + .cr-icon .cr-loader-ring
+{
+    @apply text-gray-100 fill-blue-600
+}
+
+.cr-form-input + .cr-form-message
+{
+    @apply block w-full text-stone-500 text-sm mt-1
+}
+
+.cr-form-input.cr-state-invalid + .cr-form-message
+{
+    @apply text-red-600 font-semibold
+}
+
+.cr-form-input.cr-state-invalid.cr-dirty + .cr-form-message
+{
+    @apply hidden
+}
+
+.cr-form-input.cr-state-invalid.cr-state-disabled + .cr-form-message
+{
+    @apply font-medium
+}
+
+.cr-form-input.cr-state-success + .cr-form-message
+{
+    @apply text-green-700
+}
+
+.cr-form-button
+{
+    @apply flex w-full justify-center items-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+}
+
+.cr-form-button:disabled
+{
+    @apply bg-gray-300
+}
+
+.cr-form-title
+{
+    @apply mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900
+}

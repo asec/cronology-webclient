@@ -4,8 +4,8 @@
  * @type string $name
  * @type string $uuid
  * @type array $ip
- * @type string $created
- * @type string $updated
+ * @type DateTime $created
+ * @type DateTime $updated
  */
 ?><div wire:poll>
     @if ($error)
