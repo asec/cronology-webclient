@@ -6,6 +6,7 @@ use App\Services\Cronology\Api;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::stringable(function (\DateTime $dateTime) {
             return Carbon::parse($dateTime)->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s");
         });
+
+        Schema::defaultStringLength(191);
     }
 }

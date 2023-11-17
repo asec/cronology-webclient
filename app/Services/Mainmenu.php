@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class Mainmenu
@@ -10,9 +11,30 @@ class Mainmenu
 
     public function __construct()
     {
+        if (Auth::check())
+        {
+            $this->generateUserMenu();
+        }
+        else
+        {
+            $this->generateGuestMenu();
+        }
+    }
+
+    protected function generateGuestMenu(): void
+    {
         $this->addItems([
             "Dashboard" => "home",
+            "Login" => "user.login",
             "Register" => "user.register",
+        ]);
+    }
+
+    protected function generateUserMenu(): void
+    {
+        $this->addItems([
+            "Dashboard" => "home",
+            "Logout" => "user.logout",
         ]);
     }
 

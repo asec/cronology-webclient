@@ -27,7 +27,7 @@ class Entity
             return false;
         }
 
-        if (in_array($key, ["created", "updated"]))
+        if (in_array($key, ["created", "updated", "accessTokenValid"]))
         {
             $value = new \DateTime($value);
         }

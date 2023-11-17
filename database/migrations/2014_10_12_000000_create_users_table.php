@@ -17,11 +17,13 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->timestamps();
+
             // Cronology specific fields
             $table->string("cronology_id", 24)->unique();
             $table->string("cronology_access_token", 100)->unique();
             $table->dateTime("cronology_access_token_valid");
+
+            $table->timestamps();
         });
     }
 

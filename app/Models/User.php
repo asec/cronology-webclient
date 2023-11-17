@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'cronology_id',
+        'cronology_access_token',
+        'cronology_access_token_valid'
     ];
 
     /**

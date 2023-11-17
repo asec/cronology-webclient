@@ -2,10 +2,11 @@
 
 namespace App\Services\Cronology;
 
+use App\Services\Cronology\Exception\Exception;
 use App\Services\Cronology\Response\ApiError;
 use App\Services\Cronology\Response\AppDataResponse;
+use App\Services\Cronology\Response\CreateUserResponse;
 use App\Services\Cronology\Response\PingResponse;
-use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -64,7 +65,7 @@ class Api
         }
     }
 
-    protected function request(string $method, string $endpoint, string $signature = null): array|ApiError
+    protected function request(string $method, string $endpoint, string $signature = null, array $data = []): array|ApiError
     {
         $request = Http::withOptions([
             "verify" => $this->caFile ?: true,
@@ -77,6 +78,10 @@ class Api
             $headers["Crnlg-Signature"] = $signature;
         }
         $request->withHeaders($headers);
+        if ($data)
+        {
+            $request->withBody(json_encode($data));
+        }
         try {
             $response = $request->send($method, $this->url . $endpoint);
             if ($response->ok())
@@ -91,10 +96,10 @@ class Api
         }
         catch (\Throwable $e)
         {
+            $exception = new Exception($e);
             $result = new ApiError([
-                //"error" => "There was an error while processing your request."
-                "error" => $e->getMessage()
-            ], $e->getCode());
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
         }
 
         return $result;
@@ -150,11 +155,68 @@ class Api
         {
             $result = new AppDataResponse($response, $response["statusCode"]);
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
+            $exception = new Exception($e);
             $result = new ApiError([
-                "error" => $e -> getMessage()
-            ], $e -> getCode());
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $result;
+    }
+
+    public function createUser(string $username, ?string $password = null): ApiError|CreateUserResponse
+    {
+        $message = array(
+            "username" => $username
+        );
+        if ($password !== null)
+        {
+            $message["password"] = $password;
+        }
+        $rawResult = $this -> request("PUT", "/user", $this -> createSignature($message), $message);
+        if ($rawResult instanceof ApiError)
+        {
+            return $rawResult;
+        }
+
+        try
+        {
+            $result = new CreateUserResponse($rawResult, $rawResult["statusCode"]);
+        }
+        catch (\Exception $e)
+        {
+            $exception = new Exception($e);
+            $result = new ApiError([
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $result;
+    }
+
+    public function getUserByUsername(string $username): ApiError|CreateUserResponse
+    {
+        $message = array(
+            "username" => $username
+        );
+        $rawResult = $this->request("GET", "/user", $this->createSignature($message), $message);
+        if ($rawResult instanceof ApiError)
+        {
+            return $rawResult;
+        }
+
+        try
+        {
+            $result = new CreateUserResponse($rawResult, $rawResult["statusCode"]);
+        }
+        catch (\Exception $e)
+        {
+            $exception = new Exception($e);
+            $result = new ApiError([
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
         }
 
         return $result;

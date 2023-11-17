@@ -1,11 +1,17 @@
 <form class="space-y-6" wire:submit="save" method="post">
     @csrf
 
+    @if (session("error"))
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            <span class="font-medium">Error:</span> {{ session("error") }}
+        </div>
+    @endif
+
     <div>
         <label for="email" class="cr-form-label">E-mail</label>
         <div
-            class="cr-form-input @error('email') cr-state-invalid @enderror @if($isEmailSet) cr-state-success @endif"
-            wire:loading.remove.class="cr-state-invalid"
+            class="cr-form-input @error('email') cr-state-invalid @elseif($isEmailSet) cr-state-success @enderror"
+            wire:loading.class.remove="cr-state-invalid"
             wire:dirty.class="cr-dirty"
             wire:target="email"
         >
@@ -30,8 +36,8 @@
     <div>
         <label for="password" class="cr-form-label">Password</label>
         <div
-            class="cr-form-input @error('password') cr-state-invalid @enderror @if($isConfirmationSet) cr-state-success @endif"
-            wire:loading.remove.class="cr-state-invalid"
+            class="cr-form-input @error('password') cr-state-invalid @elseif($isConfirmationSet) cr-state-success @enderror"
+            wire:loading.class.remove="cr-state-invalid"
             wire:dirty.class="cr-dirty"
             wire:target="password"
         >
@@ -57,7 +63,7 @@
     <div>
         <label for="confirmPassword" class="cr-form-label">Password confirmation</label>
         <div
-            class="cr-form-input @error('confirmPassword') cr-state-invalid @enderror @if($isConfirmationSet) cr-state-success @endif"
+            class="cr-form-input @error('confirmPassword') cr-state-invalid @elseif($isConfirmationSet) cr-state-success @enderror"
             wire:loading.remove.class="cr-state-invalid"
             wire:dirty.class="cr-dirty"
             wire:target="confirmPassword"

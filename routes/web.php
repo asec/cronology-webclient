@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User as UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +18,19 @@ Route::get('/', function () {
     return view('index');
 })->name("home");
 
-Route::get("/register", function () {
-    return view("register");
-})->name("user.register");
+Route::middleware("guest")->group(function () {
+    Route::get("/register", [UserController::class, "register"])->name("user.register");
+
+    Route::get("/login", [UserController::class, "login"])->name("user.login");
+});
+
+Route::middleware("auth")->group(function () {
+    Route::get("/logout", [UserController::class, "logout"])->name("user.logout");
+});
 
 if (env("APP_ENV") === "local")
 {
-    Route::get("/register-formstates", function () {
-        return view("register-test-formstates");
-    })->name("user.register-formstates");
+    Route::get("/test/formstates", function () {
+        return view("test.formstates");
+    })->name("test.formstates");
 }
