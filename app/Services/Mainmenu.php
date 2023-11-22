@@ -34,6 +34,7 @@ class Mainmenu
     {
         $this->addItems([
             "Dashboard" => "home",
+            "Profile" => "user.profile",
             "Logout" => "user.logout",
         ]);
     }

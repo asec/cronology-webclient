@@ -18,6 +18,7 @@ class Api
     protected string $caFile;
     protected \OpenSSLAsymmetricKey $privateKey;
     protected bool $useTimestampInSignature = false;
+    protected string $signatureIp;
 
     /**
      * @throws Exception
@@ -55,14 +56,14 @@ class Api
             throw new Exception("Missing parameter: 'privateKey'.");
         }
 
-        if (isset($config["caFile"]))
-        {
-            $this->caFile = $config["caFile"];
-        }
+        $this->caFile = $config["caFile"] ?? "";
+
         if (isset($config["signatureUseTimestamp"]))
         {
             $this->useTimestampInSignature = ($config["signatureUseTimestamp"] === "true");
         }
+
+        $this->signatureIp = $config["signatureIp"] ?? "";
     }
 
     protected function request(string $method, string $endpoint, string $signature = null, array $data = []): array|ApiError
@@ -109,7 +110,7 @@ class Api
     {
         if (!isset($message["ip"]))
         {
-            $message["ip"] = $_SERVER["SERVER_ADDR"] ?? "::ffff:127.0.0.1";
+            $message["ip"] = $_SERVER["SERVER_ADDR"] ?? $this->signatureIp ?: "::ffff:127.0.0.1";
         }
 
         $hash = hash("sha256", json_encode($message));

@@ -45,16 +45,21 @@ class Register extends Component
     public function updatedEmail(Api $api): void
     {
         $this->email = Str::lower($this->email);
-        $cronologyUser = $api->getUserByUsername($this->email);
-        if (!($cronologyUser instanceof ApiError))
+        $hasErrors = isset($this->getErrorBag()->getMessages()["email"]);
+        if (!$hasErrors)
         {
-            $this->isEmailSet = false;
-            throw ValidationException::withMessages([
-                "email" => "This user already exists."
-            ]);
+            $cronologyUser = $api->getUserByUsername($this->email);
+            if (!($cronologyUser instanceof ApiError))
+            {
+                $this->isEmailSet = false;
+                $this->reset(["password", "isPasswordSet", "confirmPassword", "isConfirmationSet"]);
+                throw ValidationException::withMessages([
+                    "email" => "This user already exists."
+                ]);
+            }
         }
-        $this->isEmailSet = !isset($this->getErrorBag()->getMessages()["email"]);
-        if (!$this->isEmailSet)
+        $this->isEmailSet = !$hasErrors;
+        if ($hasErrors)
         {
             $this->reset(["password", "isPasswordSet", "confirmPassword", "isConfirmationSet"]);
         }
@@ -84,7 +89,7 @@ class Register extends Component
         }
         else if (empty($this->password))
         {
-            $this->resetValidation(["password", "confirmPassword"]);
+            $this->resetValidation(["password", "isPasswordSet", "confirmPassword", "isConfirmationSet"]);
             return;
         }
         else if (empty($this->confirmPassword))
@@ -121,6 +126,8 @@ class Register extends Component
             $user->save();
 
             session()->flash("success", "The registration was successful, you may log in now.");
+            $this->resetErrorBag();
+            $this->dispatch("save-success");
             $this->redirectRoute("home");
         }
         catch (\Exception $e)

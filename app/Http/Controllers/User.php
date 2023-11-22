@@ -29,4 +29,23 @@ class User extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function forgotPassword(): View
+    {
+        return view("user.forgot-password");
+    }
+
+    public function resetPassword(string $token): View
+    {
+        return view("user.reset-password", [
+            "token" => $token
+        ]);
+    }
+
+    public function profile(Request $request)
+    {
+        return view("user.profile", [
+            "user" => $request->user()
+        ]);
+    }
 }

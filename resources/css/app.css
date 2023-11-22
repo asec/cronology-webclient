@@ -36,7 +36,7 @@
     @apply text-red-600 ring-red-500 focus:ring-2
 }
 
-.cr-form-input.cr-state-success input:not(:disabled)
+.cr-form-input.cr-state-success:not(.cr-dirty) input:not(:disabled)
 {
     @apply ring-green-500 focus:ring-2
 }
@@ -44,6 +44,16 @@
 .cr-form-input input + .cr-icon
 {
     @apply absolute top-0 bottom-0 right-0 flex items-center pr-3 text-xl text-gray-300 pointer-events-none
+}
+
+.cr-form-input input + .cr-icon .cr-hidden
+{
+    display: none;
+}
+
+.cr-form-input input + .cr-icon .cr-hidden.cr-dirty
+{
+    display: inline-flex;
 }
 
 .cr-form-input input:focus + .cr-icon, .cr-form-input.cr-state-focused input + .cr-icon
@@ -56,7 +66,7 @@
     @apply text-red-500
 }
 
-.cr-form-input.cr-state-success input + .cr-icon
+.cr-form-input.cr-state-success:not(.cr-dirty) input + .cr-icon
 {
     @apply text-green-600
 }
@@ -103,7 +113,7 @@
     @apply font-medium
 }
 
-.cr-form-input.cr-state-success + .cr-form-message
+.cr-form-input.cr-state-success:not(.cr-dirty) + .cr-form-message
 {
     @apply text-green-700
 }

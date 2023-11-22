@@ -1,93 +1,25 @@
 <form class="space-y-6" wire:submit="save" method="post">
     @csrf
 
-    @if (session("error"))
-        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-            <span class="font-medium">Error:</span> {{ session("error") }}
-        </div>
-    @endif
+    <x-info.flashed.error />
 
-    <div>
-        <label for="email" class="cr-form-label">E-mail</label>
-        <div
-            class="cr-form-input @error('email') cr-state-invalid @elseif($isEmailSet) cr-state-success @enderror"
-            wire:loading.class.remove="cr-state-invalid"
-            wire:dirty.class="cr-dirty"
-            wire:target="email"
-        >
-            <input id="email" name="email" type="email" autocomplete="email" autofocus wire:model.blur="email" value="{{ $email }}" />
-            <div class="cr-icon">
-                <i
-                    class="@unless($isEmailSet) fa-regular fa-envelope @else fa-solid fa-check @endif"
-                    wire:loading.remove
-                    wire:target="email"
-                ></i>
-                <x-loader.ring wire:loading wire:target="email" />
-            </div>
-        </div>
-        @error("email")
-            <div class="cr-form-message" wire:dirty.remove wire:target="email">
-                <span wire:loading.remove wire:target="email">{{ $message }}</span>
-            </div>
-        @enderror
-    </div>
+    <x-forms.input.email :value="$email" :validated="$isEmailSet" update="blur" showLoading="true" autofocus />
 
     @if($isEmailSet)
-    <div>
-        <label for="password" class="cr-form-label">Password</label>
-        <div
-            class="cr-form-input @error('password') cr-state-invalid @elseif($isConfirmationSet) cr-state-success @enderror"
-            wire:loading.class.remove="cr-state-invalid"
-            wire:dirty.class="cr-dirty"
-            wire:target="password"
-        >
-            <input id="password" name="password" type="password" autocomplete="current password" wire:model.blur="password" value="{{ $password }}" />
-            <div class="cr-icon">
-                <i
-                    class="@unless($isConfirmationSet) fa-solid fa-key @else fa-solid fa-check @endif"
-                    wire:loading.remove
-                    wire:target="password"
-                ></i>
-                <x-loader.ring wire:loading wire:target="password" />
-            </div>
-        </div>
-        @error("password")
-        <div class="cr-form-message" wire:dirty.remove wire:target="password">
-            <span wire:loading.remove wire:target="password">{{ $message }}</span>
-        </div>
-        @enderror
-    </div>
+        <x-forms.input.password :value="$password" :validated="$isPasswordSet" update="blur" showLoading="true" />
     @endif
 
-    @if($isPasswordSet)
-    <div>
-        <label for="confirmPassword" class="cr-form-label">Password confirmation</label>
-        <div
-            class="cr-form-input @error('confirmPassword') cr-state-invalid @elseif($isConfirmationSet) cr-state-success @enderror"
-            wire:loading.remove.class="cr-state-invalid"
-            wire:dirty.class="cr-dirty"
-            wire:target="confirmPassword"
+    @if($isEmailSet && $isPasswordSet)
+        <x-forms.input.password
+            name="confirmPassword"
+            :value="$confirmPassword"
+            :validated="$isConfirmationSet"
+            update="blur"
+            showLoading="true"
+            autocomplete="off"
         >
-            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="off" wire:model.blur="confirmPassword" value="{{ $confirmPassword }}" />
-            <div class="cr-icon">
-                <i
-                    class="@unless($isConfirmationSet) fa-solid fa-key @else fa-solid fa-check @endif"
-                    wire:loading.remove
-                    wire:target="confirmPassword"
-                ></i>
-                <x-loader.ring wire:loading wire:target="confirmPassword" />
-            </div>
-        </div>
-        @error("confirmPassword")
-        <div class="cr-form-message" wire:dirty.remove wire:target="confirmPassword">
-            <span wire:loading.remove wire:target="confirmPassword">{{ $message }}</span>
-        </div>
-        @elseif(!$isConfirmationSet)
-        <div class="cr-form-message">
             Please enter your chosen password again to confirm it.
-        </div>
-        @enderror
-    </div>
+        </x-forms.input.password>
     @endif
 
     <div>
@@ -123,5 +55,6 @@
             });
         });
     </script>
+    <x-helpers.livewire.clear-invalid-state />
 
 </form>
