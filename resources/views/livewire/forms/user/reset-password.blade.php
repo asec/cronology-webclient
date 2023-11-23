@@ -1,5 +1,5 @@
 <form class="space-y-6" wire:submit="save" method="post">
-    @csrf
+
     <x-info.flashed.error />
 
     <x-forms.input.email :value="$email" required />
@@ -14,7 +14,9 @@
         autocomplete="off"
     />
 
-    <div>
+    @csrf
+
+    <div class="cr-form-action">
         <button type="submit" class="cr-form-button">Create</button>
     </div>
 

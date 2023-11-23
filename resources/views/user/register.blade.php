@@ -1,13 +1,9 @@
 <x-layout.page header="Register" with-navigation="{{ true }}">
 
-    <div class="flex min-h-full flex-col justify-start">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="cr-form-title">Register an account</h2>
-        </div>
+    <x-forms.segment.centered>
+        <x-slot:title>Register an account</x-slot:title>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <livewire:forms.user.register />
-        </div>
-    </div>
+        <livewire:forms.user.register />
+    </x-forms.segment.centered>
 
 </x-layout.page>

@@ -1,5 +1,4 @@
 <form class="space-y-6" wire:submit="save" method="post">
-    @csrf
 
     <x-info.flashed.error />
 
@@ -22,7 +21,7 @@
         </x-forms.input.password>
     @endif
 
-    <div>
+    <div class="cr-form-action">
         <button type="submit" class="cr-form-button">
             @if($isPasswordSet)
                 Register
@@ -31,6 +30,8 @@
             @endif
         </button>
     </div>
+
+    @csrf
 
     <script>
         document.addEventListener("livewire:initialized", () => {

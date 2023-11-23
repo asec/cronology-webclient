@@ -1,13 +1,9 @@
 <x-layout.page header="Forgotten password">
 
-    <div class="flex min-h-full flex-col justify-start">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="cr-form-title">Reset your password</h2>
-        </div>
+    <x-forms.segment.centered>
+        <x-slot:title>Reset your password</x-slot:title>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <livewire:forms.user.forgot-password />
-        </div>
-    </div>
+        <livewire:forms.user.forgot-password />
+    </x-forms.segment.centered>
 
 </x-layout.page>

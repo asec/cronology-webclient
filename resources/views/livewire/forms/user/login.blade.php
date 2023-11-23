@@ -1,5 +1,5 @@
 <form class="space-y-6" wire:submit="save" method="post">
-    @csrf
+
     <x-info.flashed.error />
 
     <x-forms.input.email :value="$email" required />
@@ -17,9 +17,11 @@
         </div>
     </div>
 
-    <div>
+    <div class="cr-form-action">
         <button type="submit" class="cr-form-button">Log in</button>
     </div>
+
+    @csrf
 
     <x-helpers.livewire.clear-invalid-state event="login-success" />
 </form>

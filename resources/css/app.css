@@ -128,7 +128,47 @@
     @apply bg-gray-300
 }
 
-.cr-form-title
+.cr-form-centered
+{
+    @apply sm:mx-auto sm:w-full sm:max-w-sm
+}
+
+.cr-form-centered .cr-form-title
 {
     @apply mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900
+}
+
+.cr-form-panel
+{
+    @apply border rounded-md border-slate-200 shadow-sm p-6 mt-10 overflow-hidden
+}
+
+.cr-form-panel:first-child
+{
+    @apply mt-0
+}
+
+.cr-form-panel .cr-panel-head
+{
+    @apply bg-slate-100 -m-6 mb-6 py-3 px-6 border-b-2 border-slate-200
+}
+
+.cr-form-panel .cr-panel-head .cr-form-title
+{
+    @apply text-lg font-semibold leading-6 tracking-tight text-gray-900
+}
+
+.cr-form-panel .cr-form-action
+{
+    @apply border-t pt-6 flex space-x-4
+}
+
+.cr-form-panel .cr-form-action .cr-form-button
+{
+    @apply w-1/4
+}
+
+a[disabled]
+{
+    @apply pointer-events-none text-gray-200 select-none
 }

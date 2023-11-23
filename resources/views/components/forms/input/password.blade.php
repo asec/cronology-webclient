@@ -6,7 +6,7 @@
     "update" => "submit",
     "showLoading" => false
 ])
-<x-forms.input.input
+<x-forms.input.text
     :name="$name"
     :label="$label"
     :value="$value"
@@ -30,4 +30,4 @@
         </x-slot:upper-controls>
     @endisset
     {{ $slot }}
-</x-forms.input.input>
+</x-forms.input.text>

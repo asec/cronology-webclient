@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Services\Cronology\Api;
-use Carbon\Carbon;
+use App\Services\Utils;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
@@ -27,11 +27,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::directive("datetime", function (string $expression) {
-            return '<?php echo \Carbon\Carbon::parse(' . $expression . ')->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s") ?>';
+            return '<?php echo App\Services\Utils::formatDate(' . $expression . ') ?>';
         });
 
         Blade::stringable(function (\DateTime $dateTime) {
-            return Carbon::parse($dateTime)->setTimezone("Europe/Budapest")->format("Y-m-d H:i:s");
+            return Utils::formatDate($dateTime);
         });
 
         Schema::defaultStringLength(191);

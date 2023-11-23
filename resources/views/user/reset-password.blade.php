@@ -1,13 +1,9 @@
 <x-layout.page header="New password">
 
-    <div class="flex min-h-full flex-col justify-start">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="cr-form-title">Create your new password</h2>
-        </div>
+    <x-forms.segment.centered>
+        <x-slot:title>Create your new password</x-slot:title>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <livewire:forms.user.reset-password token="{{ $token }}" />
-        </div>
-    </div>
+        <livewire:forms.user.reset-password token="{{ $token }}" />
+    </x-forms.segment.centered>
 
 </x-layout.page>

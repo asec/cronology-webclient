@@ -1,13 +1,9 @@
 <x-layout.page header="Log in">
 
-    <div class="flex min-h-full flex-col justify-start">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="cr-form-title">Log in to your account</h2>
-        </div>
+    <x-forms.segment.centered>
+        <x-slot:title>Log in to your account</x-slot:title>
 
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <livewire:forms.user.login />
-        </div>
-    </div>
+        <livewire:forms.user.login />
+    </x-forms.segment.centered>
 
 </x-layout.page>

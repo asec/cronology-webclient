@@ -5,6 +5,7 @@ namespace App\Services\Cronology;
 use App\Services\Cronology\Exception\Exception;
 use App\Services\Cronology\Response\ApiError;
 use App\Services\Cronology\Response\AppDataResponse;
+use App\Services\Cronology\Response\CreateAccessTokenResponse;
 use App\Services\Cronology\Response\CreateUserResponse;
 use App\Services\Cronology\Response\PingResponse;
 use Illuminate\Support\Facades\Http;
@@ -211,6 +212,32 @@ class Api
         try
         {
             $result = new CreateUserResponse($rawResult, $rawResult["statusCode"]);
+        }
+        catch (\Exception $e)
+        {
+            $exception = new Exception($e);
+            $result = new ApiError([
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $result;
+    }
+
+    public function createAccessToken(string $user_id): ApiError|CreateAccessTokenResponse
+    {
+        $message = [
+            "user_id" => $user_id
+        ];
+        $rawResult = $this->request("POST", "/user/accessToken", $this->createSignature($message), $message);
+        if ($rawResult instanceof ApiError)
+        {
+            return $rawResult;
+        }
+
+        try
+        {
+            $result = new CreateAccessTokenResponse($rawResult, $rawResult["statusCode"]);
         }
         catch (\Exception $e)
         {

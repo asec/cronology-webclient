@@ -12,7 +12,16 @@
         {{ $upperControls ?? "" }}
     </div>
     <div
-        class="cr-form-input @error($name) cr-state-invalid @elseif($validated) cr-state-success @enderror"
+        class="
+            cr-form-input
+            @error($name)
+                cr-state-invalid
+            @elseif($validated && $validated !== "false")
+                cr-state-success
+            @elseif($validated === "false")
+                cr-state-invalid
+            @enderror
+        "
         {{--wire:loading.class.remove="cr-state-invalid"--}}
         wire:dirty.class="cr-dirty"
         wire:target="{{ $name }}"
@@ -31,12 +40,23 @@
         @isset($icon)
             <div class="cr-icon">
                 <span class="inline-flex" @if($showLoading) wire:loading.remove wire:target="{{ $name }}" @endif >
-                    @if($validated)
+                    @if($validated && $validated !== "false")
                         <span class="inline-flex" wire:dirty.remove wire:target="{{ $name }}">
                             @isset($iconValidated)
                                 {{ $iconValidated }}
                             @else
                                 <i class="fa-solid fa-check"></i>
+                            @endisset
+                        </span>
+                        <span class="cr-hidden" wire:dirty.class="cr-dirty" wire:target="{{ $name }}">
+                            {{ $icon }}
+                        </span>
+                    @elseif($validated === "false")
+                        <span class="inline-flex" wire:dirty.remove wire:target="{{ $name }}">
+                            @isset($iconInvalidated)
+                                {{ $iconInvalidated }}
+                            @else
+                                <i class="fa-solid fa-circle-exclamation"></i>
                             @endisset
                         </span>
                         <span class="cr-hidden" wire:dirty.class="cr-dirty" wire:target="{{ $name }}">
