@@ -4,11 +4,11 @@ namespace App\Livewire;
 
 use App\Services\Cronology\Api;
 use App\Services\Cronology\Response\ApiError;
+use App\Traits\Livewire\UsesCache;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 /**
@@ -26,11 +26,6 @@ class Ping extends Component
     {
         return App::get(Api::class);
     }
-
-    /*public function mount(): void
-    {
-        $this->refresh();
-    }*/
 
     public function refresh(): void
     {

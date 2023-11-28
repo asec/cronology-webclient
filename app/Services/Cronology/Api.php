@@ -8,11 +8,14 @@ use App\Services\Cronology\Response\AppDataResponse;
 use App\Services\Cronology\Response\CreateAccessTokenResponse;
 use App\Services\Cronology\Response\CreateUserResponse;
 use App\Services\Cronology\Response\PingResponse;
+use App\Services\Cronology\Response\ScheduleResponse;
+use App\Traits\Livewire\UsesCache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class Api
 {
+    use UsesCache;
 
     protected string $url;
     protected string $appId;
@@ -20,6 +23,7 @@ class Api
     protected \OpenSSLAsymmetricKey $privateKey;
     protected bool $useTimestampInSignature = false;
     protected string $signatureIp;
+    protected string $accessToken;
 
     /**
      * @throws Exception
@@ -67,7 +71,33 @@ class Api
         $this->signatureIp = $config["signatureIp"] ?? "";
     }
 
-    protected function request(string $method, string $endpoint, string $signature = null, array $data = []): array|ApiError
+    public function setAccessToken(string $accessToken): void
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    protected function usesAccessToken(string $method, string $endpoint)
+    {
+        $routes = [
+            "get" => [
+                "/user"
+            ],
+            "post" => [
+                "/schedule"
+            ]
+        ];
+        $method = strtolower($method);
+
+        return isset($routes[$method]) && in_array(strtolower($endpoint), $routes[$method]);
+    }
+
+    protected function request(
+        string $method,
+        string $endpoint,
+        string $signature = null,
+        array $data = [],
+        array $queryParams = []
+    ): array|ApiError
     {
         $request = Http::withOptions([
             "verify" => $this->caFile ?: true,
@@ -79,7 +109,15 @@ class Api
         {
             $headers["Crnlg-Signature"] = $signature;
         }
+        if (isset($this->accessToken) && $this->usesAccessToken($method, $endpoint))
+        {
+            $headers["Crnlg-Access-Token"] = $this->accessToken;
+        }
         $request->withHeaders($headers);
+        if ($queryParams)
+        {
+            $request->withQueryParameters($queryParams);
+        }
         if ($data)
         {
             $request->withBody(json_encode($data));
@@ -238,6 +276,55 @@ class Api
         try
         {
             $result = new CreateAccessTokenResponse($rawResult, $rawResult["statusCode"]);
+        }
+        catch (\Exception $e)
+        {
+            $exception = new Exception($e);
+            $result = new ApiError([
+                "error" => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $result;
+    }
+
+    public function schedule(string $schedule, int $limit = 0): ApiError|ScheduleResponse
+    {
+        //$this->cacheChangeNamespace("api", false);
+        $message = [
+            "schedule" => $schedule
+        ];
+        $queryParams = [];
+        if ($limit > 1)
+        {
+            $queryParams["limit"] = $limit;
+        }
+        /*$cacheKey = md5("POST /schedule") . "." . md5(join(":", [$schedule, $limit]));
+        $rawResult = $this->cacheGet($cacheKey);
+        if ($rawResult === null)
+        {
+            $rawResult = $this->request("POST", "/schedule", null, $message, $queryParams);
+        }*/
+        $rawResult = $this->request("POST", "/schedule", null, $message, $queryParams);
+        if ($rawResult instanceof ApiError)
+        {
+            //$this->cacheSet($cacheKey, $rawResult, 60);
+            return $rawResult;
+        }
+
+        try
+        {
+            $result = new ScheduleResponse($rawResult, $rawResult["statusCode"]);
+            /*$firstDate = $result->next[0];
+            $cacheTime = $firstDate->getTimestamp() - time();
+            if ($cacheTime > 0)
+            {
+                $this->cacheSet($cacheKey, $rawResult, $cacheTime);
+            }
+            else
+            {
+                $this->cacheSet($cacheKey, $rawResult, 60);
+            }*/
         }
         catch (\Exception $e)
         {

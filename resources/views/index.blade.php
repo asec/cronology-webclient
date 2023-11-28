@@ -1,17 +1,17 @@
 <x-layout.page header="Dashboard">
-
     <x-slot:title>
         Home - Cronology
     </x-slot:title>
 
-    Welcome home, good hunter.
+    @auth
+        <x-forms.segment.centered>
+            <x-slot:title>Schedule:</x-slot:title>
 
-    <x-home-section title="Ping:">
-        <livewire:ping lazy />
-    </x-home-section>
-
-    <x-home-section title="Get App Data:">
-        <livewire:app-data lazy />
-    </x-home-section>
+            <livewire:schedule />
+        </x-forms.segment.centered>
+    @endauth
+    @guest
+        Welcome home, good hunter.
+    @endguest
 
 </x-layout.page>

@@ -18,7 +18,17 @@
 
 .cr-form-input input
 {
-    @apply block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6
+    @apply block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:leading-6
+}
+
+.cr-form-input input:not(.cr-big)
+{
+    @apply sm:text-sm
+}
+
+.cr-form-input input.cr-big
+{
+    @apply sm:text-lg
 }
 
 .cr-form-input input:focus, .cr-form-input.cr-state-focused input

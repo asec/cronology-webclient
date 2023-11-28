@@ -4,7 +4,6 @@ namespace App\Livewire\Forms\User;
 
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;

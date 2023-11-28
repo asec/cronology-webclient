@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('index');
 })->name("home");
 
+Route::get("/api-status", function () {
+    return view("api-status");
+})->name("api.status");
+
 Route::middleware("guest")->group(function () {
     Route::get("/register", [UserController::class, "register"])->name("user.register");
 
@@ -41,6 +45,7 @@ if (env("APP_ENV") === "local")
     })->name("test.formstates");
 
     Route::get("/phpinfo", function () {
-        dd(openssl_get_cert_locations());
+        //dd(openssl_get_cert_locations());
+        phpinfo();
     });
 }

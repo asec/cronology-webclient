@@ -32,6 +32,7 @@
         ])
     </div>
 
+    @isset($_instance)
     <script type="text/javascript">
         document.addEventListener("livewire:initialized", () => {
             setInterval(() => {
@@ -39,4 +40,5 @@
             }, 500);
         });
     </script>
+    @endisset
 </div>

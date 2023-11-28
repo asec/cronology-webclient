@@ -1,16 +1,22 @@
 @props([
     "name" => "field",
-    "label" => "Label",
+    "label" => null,
     "value" => "",
     "validated" => false,
     "update" => "submit",
     "showLoading" => false
 ])
 <div>
-    <div class="flex justify-between items-center">
-        <label for="{{ $name }}" class="cr-form-label">{{ $label }}</label>
-        {{ $upperControls ?? "" }}
-    </div>
+    @isset($label)
+        <div class="flex justify-between items-center">
+            <label for="{{ $name }}" class="cr-form-label">{{ $label }}</label>
+            {{ $upperControls ?? "" }}
+        </div>
+    @elseif(isset($upperControls))
+        <div class="flex justify-end items-center">
+            {{ $upperControls }}
+        </div>
+    @endisset
     <div
         class="
             cr-form-input
@@ -34,6 +40,8 @@
                 wire:model="{{ $name }}"
             @elseif($update === "blur")
                 wire:model.blur="{{ $name }}"
+            @elseif(str_starts_with($update, "live"))
+                wire:model.{{ $update }}="{{ $name }}"
             @endif
             value="{{ $value }}"
         />
